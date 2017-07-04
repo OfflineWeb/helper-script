@@ -24,6 +24,7 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE         #
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                    #
 #############################################################################
+#set -n
 
 Color_Off='\033[0m'       # Text Reset
 
@@ -39,7 +40,7 @@ White='\033[0;37m'        # White
 
 echo -e $Yellow'\n********* Updating git repos **********\n'$Color_Off
 
-GIT_MODIFIED_STATUS='Changes to be committed:'
+GIT_NOT_MODIFIED_STATUS='nothing to commit, working directory clean'
 
 work_dir=$(pwd)					# current directory
 base_dir=$(dirname $work_dir)	# parent of current directory
@@ -47,13 +48,14 @@ base_dir=$(dirname $work_dir)	# parent of current directory
 # If the git repo in the sub-directory is updated, then commit, 
 # ask for a comment for git commit
 for dir in $(ls -1 $base_dir); do
-
+	echo $dir
 	if [[ -d "$base_dir/$dir" ]]; then
 		cd "$base_dir/$dir"
-
+		echo "in $dir"
 		# find git repo status, output == 1 means something updated
-		git_status=$(git status | grep -c "$GIT_MODIFIED_STATUS")
-		if [[ "$git_status" == '1'   ]]; then
+		git_status=$(git status | grep -c "$GIT_NOT_MODIFIED_STATUS")
+		echo "$git_status"
+		if [[ "$git_status" == '0' ]]; then
 			
 			# prompt for a comment for commit,  
 			echo -ne $Green"$dir : git comment :: "$Color_Off
