@@ -48,13 +48,13 @@ base_dir=$(dirname $work_dir)	# parent of current directory
 # If the git repo in the sub-directory is updated, then commit, 
 # ask for a comment for git commit
 for dir in $(ls -1 $base_dir); do
-	echo $dir
+
 	if [[ -d "$base_dir/$dir" ]]; then
 		cd "$base_dir/$dir"
-		echo "in $dir"
+
 		# find git repo status, output == 1 means something updated
 		git_status=$(git status | grep -c "$GIT_NOT_MODIFIED_STATUS")
-		echo "$git_status"
+
 		if [[ "$git_status" == '0' ]]; then
 			
 			# prompt for a comment for commit,  
@@ -69,6 +69,8 @@ for dir in $(ls -1 $base_dir); do
 			git commit -am "$comment"
 			git pull origin master
 			git push origin master
+		else
+			echo -e $Cyan"Clean $dir, nothing to commit.\n"$Color_Off
 		fi
 		cd "$base_dir"
 	fi
