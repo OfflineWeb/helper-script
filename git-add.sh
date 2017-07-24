@@ -43,7 +43,7 @@ for dir in $(ls -1 $base_dir); do
 
 		echo -ne $Green"$dir : initializing git :: "$Color_Off
 		git init
-		git remote add origin "git@github.com:OfflineWeb/$dir/.git"
+		git remote add origin "git@github.com:OfflineWeb/$dir.git"
 		cp "$work_dir/.gitignore" .
 		cp "$work_dir/LICENSE" .
 		touch README.md
