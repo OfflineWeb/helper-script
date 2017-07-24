@@ -24,21 +24,8 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE         #
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                    #
 #############################################################################
-#set -n
 
 source ./colors.sh
-
-#Color_Off='\033[0m'       # Text Reset
-
-# Regular Colors
-#Black='\033[0;30m'        # Black
-#Red='\033[0;31m'          # Red
-#Green='\033[0;32m'        # Green
-#Yellow='\033[0;33m'       # Yellow
-#Blue='\033[0;34m'         # Blue
-#Purple='\033[0;35m'       # Purple
-#Cyan='\033[0;36m'         # Cyan
-#White='\033[0;37m'        # White
 
 echo -e $Yellow'\n********* Updating git repos **********\n'$Color_Off
 
@@ -51,29 +38,17 @@ base_dir=$(dirname $work_dir)	# parent of current directory
 # ask for a comment for git commit
 for dir in $(ls -1 $base_dir); do
 
-	if [[ -d "$base_dir/$dir" ]]; then
+	if [[ ! -d "$base_dir/$dir/.git" ]]; then
 		cd "$base_dir/$dir"
 
-		# find git repo status, output == 1 means something updated
-		git_status=$(git status | grep -c "$GIT_NOT_MODIFIED_STATUS")
+		echo -ne $Green"$dir : initializing git :: "$Color_Off
+		git init
+		git remote add origin "git@github.com:OfflineWeb/$dir/.git"
+		cp "$work_dir/.gitignore" .
+		cp "$work_dir/LICENSE" .
+		touch README.md
+		echo "Placehoder for $dir" >> README.md
 
-		if [[ "$git_status" == '0' ]]; then
-			
-			# prompt for a comment for commit,  
-			echo -ne $Green"$dir : git comment :: "$Color_Off
-			read comment			
-			if [[ -z "${comment// }" ]]; then
-				comment='Updated'
-			fi
-
-			# update git repo
-			git add .
-			git commit -am "$comment"
-			git pull origin master
-			git push origin master
-		else
-			echo -e $Cyan"Clean $dir, nothing to commit.\n"$Color_Off
-		fi
 		cd "$base_dir"
 	fi
 done
