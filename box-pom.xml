@@ -38,8 +38,8 @@
         <module>../logger</module>
         <module>../shared-object</module>
         <module>../persistence-intf</module>
-        <module>../couch-accessor</module>
-        <module>../etcd-accessor</module>
+        <module>../couch-connector</module>
+        <module>../etcd-connector</module>
         <module>../rest-connector</module>
         <module>../front-end</module>
     </modules>
